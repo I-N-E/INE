@@ -1,0 +1,103 @@
+.div_view {
+    display: grid;
+    grid-template-columns: 1% 69% auto;
+    gap: 1%;
+}
+
+.div_line{
+    width: 100%;
+    border-left: 2px solid #39aea9;
+    margin: 110px 0px 0px 0px;
+    float: right;
+}
+
+.line_hr{
+    width: 20%;
+    border: 1px solid #39aea9;
+    margin-left: -2.9%;
+}
+
+.div_view img {
+    width: 100%;
+    border-radius: 2%;
+}
+
+.data_view {
+    width: 100%;
+    text-align: center;
+}
+
+.data_view img {
+    width: 60%;
+    border-radius: 10%;
+}
+
+.data_view p {
+    font-size: 70%;
+}
+
+#text-heading {
+    font-size: 70%;
+    margin-top: 10px;
+}
+
+#btn-back {
+    font-family: 'Arial Narrow Bold', sans-serif;
+    margin-top: 10px;
+    width: 30%;
+    padding: 10px 10px;
+    background-color: #1a8ab4;
+    color: #ffffff;
+}
+
+#btn-back:hover{
+    background-color: #2cc7ff;
+    color: #414141;
+    transition: 0.2s;
+}
+
+#btn_good{
+    margin-top: 20px;
+    width: 30%;
+    padding: 10px 10px;
+    color: #414141;
+    background-color: #39aea9;
+    font-family: 'Arial Narrow Bold', sans-serif;
+}
+
+#btn_good:hover{
+    transition: 0.2s;
+    background-color: #48ebe3;
+    color: #414141;
+}
+
+#btn_no_good{
+    margin-top: 20px;
+    width: 30%;
+    padding: 10px 10px;
+    color: #414141;
+    background-color: #e8a2ab;;
+    font-family: 'Arial Narrow Bold', sans-serif;
+}
+
+#btn_no_good:hover{
+    transition: 0.2s;
+    background-color: #414141;
+    color: #e8a2ab;;
+}
+
+#btn_follow{
+    margin-top: 20px;
+    width: 80%;
+    padding: 5px 5px;
+    color: #414141;
+    background-color: #1a8ab4;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 14px;
+}
+
+#btn_follow:hover{
+    transition: 0.2s;
+    background-color: #414141;
+    color: #1a8ab4;
+}

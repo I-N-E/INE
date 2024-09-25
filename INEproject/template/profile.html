@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel="stylesheet" href="{% static 'style/profile.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'image/INE.ico' %}">
+</head>
+<body>
+    <!-- Menubar -->
+    <div class="menubar">
+        <img src="{% static 'image/INE.png' %}" alt="logo" class="image_logo"><p class="text_logo">Welcome : {{ name }}</p>
+        <a href="/logout/"><h2 class="logout_button">Logout</h2></a>
+    </div>
+    <!-- Profile -->
+    <div id="div-profile">
+        <div id="div-columns">
+            {% if img.image_profile %}
+                <img src="/static/{{img.image_profile}}/" alt="" id="img-profile">
+            {% else %}
+                <img src="https://cdn4.iconfinder.com/data/icons/web-ui-color/128/Account-512.png" alt="" id="img-profile">
+            {% endif %}
+            <br><p style="font-size: 10px;">USER ID : {{ user.id }}</p>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="">ชื่อ</label><br>{{ data.first_name }}<br>
+                <label for="">นามสกุล</label><br>{{ data.last_name }}<br>
+                <label for="">อีเมลล์</label><br>{{ data.email }}<br>
+                <label for="">รูปโปรไฟลล์</label><br>{{ form_img.image_profile }}<br>
+                <input type="submit" value="Update Profile" name="btn-update" id="btn_update">
+                <input type="submit" value="Dashboard" name="btn-back-to-dashboard" id="btn_back">
+            </form>
+        </div>
+        <br>
+        <div id="div-columns">
+            <div class="div_view_project">
+                <p>Project : {{idea.count}}</p>
+                <div id="scroll">
+                    {% for ideas in idea %}
+                    <ul id="list_idea">
+                        <a href="{% url 'idea' name ideas.id %}"><li>
+                            ID:{{ideas.id}} -- {{ideas.idea_name}} -- {{ideas.idea_datetime|date:'j/m/Y - G.i'}}
+                            {% if idaes.complete %} -- complete:{{ideas.idea_complete}} {% endif %}
+                        </li></a>
+                    </ul>
+                {% endfor %}
+                </div>
+            </div>
+            <div class="div_view_follow">
+                <p>Following : {{img.count_follow}}</p>
+                <div id="scroll">
+                    {% for friend in img.following.all %}
+                        <ul id="list_idea">
+                            <a href="{% url 'following' friend.id %}"><li>{{friend.username}}</li></a>
+                        </ul>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

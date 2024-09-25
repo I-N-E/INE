@@ -1,0 +1,196 @@
+/* Style Heading Page (Main Page) */
+.menubar{
+    width: 100%;
+    height: 70px;
+    background-color: #414141;
+}
+
+.image_logo{
+    margin-left: 10px;
+    width: 70px;
+    height: 70px;
+    float: left;
+}
+
+.text_logo{
+    color: #39aea9;
+    float: left;
+    margin: 25px 0px 0px 10px;
+}
+/* Style Link In Menubar */
+.menu_button{
+    color: #39aea9;
+    float: right;
+    margin: 20px 25px;
+}
+
+.menu_button:hover{
+    color: #04fcef;
+    transition: 0.5s;
+}
+/* Style Sign Ip */
+#div_signin{
+    height: 250px;
+    border:solid 5px #39aea9;
+    color: #414141;
+    padding: 10px 0px 10px 10px;
+    display: none;
+}
+
+#input_signin{
+    width: 300px;
+    padding: 3px 3px;
+    margin: 5px 0px 10px 0px;
+    border-radius: 5px;
+    border: 2px solid #39aea9;
+    color: #414141;
+    justify-content: center;
+}
+
+#input_signin:hover{
+    border: 2px solid #04fcef;
+    transition: 0.5s;
+}
+
+#div_signin input[type=submit]{
+    width: 308px;
+    padding: 3px;
+    color: #414141;
+    background-color: #39aea9;
+    border: 2px solid #414141;
+    border-radius: 5px;
+}
+
+#div_signin input[type=submit]:hover{
+    background-color: #04fcef;
+    transition: 0.5s;
+}
+
+#button_cancle{
+    width: 130px;
+    padding: 3px;
+    margin: 20px 48px 0px 0px;
+    background-color: #ff0101;
+    border-radius: 5px;
+}
+
+#button_cancle:hover{
+    transition: 0.5s;
+    background-color: #fd7f7f;
+}
+
+#button_signup{
+    width: 130px;
+    padding: 3px;
+    margin: 20px 0px 0px 0px;
+    background-color: #1f9ce4;
+    border-radius: 5px;
+}
+
+#button_signup:hover{
+    transition: 0.5s;
+    background-color: #68c8ff;
+}
+
+.div_form_signin{
+    width: 308px;
+    display: block;
+    margin: auto;
+    animation: Zoom 0.5s;
+}
+/* Style Sign Up */
+#div_signup{
+    height: 250px;
+    border:solid 5px #39aea9;
+    color: #414141;
+    padding: 10px 0px 10px 10px;
+    display: none;
+}
+
+#div_signup input[type=submit]{
+    width: 308px;
+    padding: 3px;
+    color: #414141;
+    background-color: #39aea9;
+    border: 2px solid #414141;
+    border-radius: 5px;
+}
+
+#div_signup input[type=submit]:hover{
+    background-color: #04fcef;
+    transition: 0.5s;
+}
+
+.div_form_signup{
+    width: 308px;
+    display: block;
+    margin: auto;
+    animation: Zoom 0.5s;
+}
+
+.logout_button{
+    color: #f50057;
+    float: right;
+    margin: 20px 25px;
+}
+
+.logout_button:hover{
+    color: #ee5c77;
+    transition: 0.5s;
+}
+
+/* Style Content */
+.grid_content{
+    display: grid;
+    grid-template-columns: 19.5% 79.5%;
+    gap: 1%;
+}
+
+.item{
+    padding: 10px 0px 0px 0px;
+}
+
+.item div{
+    display: none;
+    animation: ChangeContent 0.5s;
+}
+
+.menu_item{
+    list-style: none;
+    font-size: 14px;
+    text-align: center;
+    padding: 5px 5px;
+    border: 2px solid #39aea9;
+}
+
+.menu_item a{
+    text-decoration: none;
+    color: #414141;
+}
+
+.menu_item a:focus{
+    color: #39aea9;
+}
+
+.menu_item:hover{
+    background-color: #414141;
+}
+
+.menu_item:hover a{
+    color: #39aea9;
+}
+
+.menu_item:hover a:hover{
+    color: #04fcef;
+}
+
+/* animation keyframe */
+@keyframes Zoom {
+    0% , 100% {transform: scale(1);}
+    50% {transform: scale(1.1);}
+}
+
+@keyframes ChangeContent {
+    0% , 100% {transform: translateX(0px);}
+    50% {transform: translateX(5px);}
+}

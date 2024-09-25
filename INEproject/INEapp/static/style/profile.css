@@ -1,0 +1,125 @@
+
+#div-profile{
+    margin-top: 20px;
+    width: 90%;
+    padding-left: 5%;
+}
+
+#div-columns{
+    width: 100%;
+    text-align: center;
+    box-shadow: 0px 30px 50px rgba(0,0,0,0.1);
+}
+
+#btn_update{
+    border-radius: 5px;
+    margin-top: 25px;
+    border: 1px solid #414141;
+    background-color: #41b496;
+}
+
+#btn_update:hover{
+    border: 1px solid #4ccfac;
+    background-color: #4ccfac;
+    transition: 0.3s;
+}
+
+#btn_back{
+    border-radius: 5px;
+    border: 1px solid #414141;
+    background-color: #1a8ab4;
+}
+
+#btn_back:hover{
+    border: 1px solid #27a8d7;
+    background-color: #27a8d7;
+    transition: 0.3s;
+}
+
+#div-columns input{
+    width: 50%;
+    margin-left: 5px;
+    margin-top: 5px;
+    padding: 5px 5px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #414141;
+}
+
+#div-columns input[type='submit']{
+    width: 51%;
+    margin-left: 5px;
+    padding: 5px 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #414141;
+}
+
+#div-columns input:hover{
+    border: 1px solid #4ccfac;
+    transition: 0.3s;
+}
+
+#div-columns input:focus{
+    background-color: #414141;
+    color: #4ccfac;
+}
+
+#div-columns label{
+    position: absolute;
+    left: 27.5%;
+}
+
+#img-profile{
+    width: 16%;
+    height: auto;
+    border-radius: 10%;
+}
+
+.div_view_follow{
+    display: block;
+    float: left;
+    width: 30%;
+    text-align: center;
+}
+
+.div_view_project{
+    display: block;
+    float: left;
+    width: 70%;
+    text-align: left;
+    
+}
+
+#scroll{
+    width: 100%;
+    height: 300px;
+    border: 1px solid #414141;
+    overflow-y: scroll;
+}
+
+#list_idea{
+    list-style: none;
+    font-size: 12px;
+    margin-left: -30px;
+}
+
+#list_idea a{
+    text-decoration: none;
+    color: #414141;
+
+}
+
+#list_idea a li{
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #414141;
+
+}
+
+#list_idea a li:hover{
+    transition: 0.2s;
+    color: #41b496;
+    border: 1px solid #4ccfac;
+    background-color: #414141;
+
+}

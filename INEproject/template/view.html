@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel="stylesheet" href="{% static 'style/view.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'image/INE.ico' %}">
+</head>
+<body>
+    <!-- Menubar -->
+    <div class="menubar">
+        <img src="{% static 'image/INE.png' %}" alt="logo" class="image_logo"><p class="text_logo">Welcome : {{ name }}</p>
+        <a href="/logout/"><h2 class="logout_button">Logout</h2></a>
+    </div>
+    <!-- View Project -->
+    <div class="div_view">
+        <div class="div_line"></div>
+        <div>
+            <a href="{% url 'public' name %}"><button id="btn-back">Public</button></a><br>
+            {% if name in view.idea_good.all %}
+                <a href="{% url 'good' view.id %}"><button id="btn_no_good">Good ✘</button></a>
+            {% else %}
+                <a href="{% url 'good' view.id %}"><button id="btn_good">Good ✔</button></a>
+            {% endif %}
+            <h3 id="name_view">{{view.idea_name}}</h3>
+            {% if view.idea_image %}
+                <img src="/static/{{view.idea_image}}/" alt="">
+            {% endif %}
+            <p>{{view.idea_description}}</p>
+            {% if sub %}
+                {% for subs in sub %}
+                    <hr class="line_hr">
+                    <h3>{{subs.sub_idea}}</h3>
+                    <p style="font-size: 10px;">{{subs.sub_datetime}}</p>
+                    {% if subs.sub_image %}
+                        <img src="/static/{{subs.sub_image}}/" alt="">
+                    {% endif %}
+                    <p>{{subs.sub_body}}</p>
+                    {% if subs.sub_file %}
+                        <a href="/static/{{subs.sub_file}}/" target="_blank"><button>view document</button></a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="data_view">
+            <p id="text-heading">Create : {{ view.idea_datetime|date:'j/m/Y - G.i' }} @ {{ user.username }} -- <a href="#">Good : {{view.count_good}}</a></p>
+            {% if img.image_profile %}
+                <img src="/static/{{img.image_profile}}/" alt=""><br>
+            {% else %}
+                <img src="https://cdn4.iconfinder.com/data/icons/web-ui-color/128/Account-512.png" alt=""><br>
+            {% endif %}
+            <a href="{% url 'owner' view.id %}"><button id="btn_follow">view profile</button></a>
+            <hr>
+            <div>
+                <p id="text-heading" style="text-align: left; margin-left: 10%;">method : {{sub.count}}</p>
+                {% if view.idea_complete %}
+                    <p id="text-heading" style="text-align: left; margin-left: 10%;">complete : {{view.idea_complete|date:'j/m/Y - G.i'}}</p>
+                {% else %}
+                    <p id="text-heading" style="text-align: left; margin-left: 10%;">complete : false</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel="stylesheet" href="{% static 'style/owner.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'image/INE.ico' %}">
+</head>
+<body>
+    <!-- Menubar -->
+    <div class="menubar">
+        <img src="{% static 'image/INE.png' %}" alt="logo" class="image_logo"><p class="text_logo">Welcome : {{ name }}</p>
+        <a href="/logout/"><h2 class="logout_button">Logout</h2></a>
+    </div>
+    <!-- Following -->
+    <div class="div_owner">
+        <div class="div1">
+            <div class="div_image">
+                {% if data.image_profile %}
+                    <img src="/static/{{data.image_profile}}/" alt="" id="img-profile">
+                {% else %}
+                    <img src="https://cdn4.iconfinder.com/data/icons/web-ui-color/128/Account-512.png" alt="" id="img-profile">
+                {% endif %}
+                <a href="{% url 'profile' name %}"><button id="btn_back_view">profile</button></a>
+            </div>
+            <div class="div_datauser">
+                <label for="">ชื่อ</label><br><input type="text" value="{{ owner.first_name }}" disabled><br>
+                <label for="">นามสกุล</label><br><input type="text" value="{{ owner.last_name }}" disabled><br>
+                <label for="">อีเมลล์</label><br><input type="text" value="{{ owner.email }}" disabled>
+            </div>
+        </div>
+        <div class="div2">
+            {% if name in data.following.all %}
+            <a href="{% url 'folloW' owner.id %}"><button id="btn_no_follow">follow ✔</button></a>
+            {% else %}
+            <a href="{% url 'folloW' owner.id %}"><button id="btn_follow">follow</button></a>
+            {% endif %} 
+            <select name="user_follow" id="select_follow">
+                <option value="">follow : {{data.count_follow}}</option>
+                {% for user_follow in data.following.all %}
+                    <option value="{{user_follow}}">{{user_follow}}</option>
+                {% endfor %}
+            </select>
+            <hr>
+            <p id="text_data">username : {{owner.username}}</p>
+            <p id="text_data">user id : {{owner.id}}</p>
+            <p id="text_data">active : {{owner.is_active}}</p>
+            <p id="text_data">date join : {{owner.date_joined|date:'j/m/Y - G.i'}}</p>
+            <p id="text_data">last login : {{owner.last_login|date:'j/m/Y - G.i'}}</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INE</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'image/INE.ico' %}">
+</head>
+<body>
+    <!-- Menubar -->
+    <div class="menubar">
+        <img src="{% static 'image/INE.png' %}" alt="logo" class="image_logo"><p class="text_logo">Idea Navigate Easily</p>
+        <a href="#" onclick="open_signin()"><h2 class="menu_button">Sign In</h2></a>
+    </div>
+    <!-- Sugn In Page -->
+    <div id="div_signin">
+        <div class="div_form_signin">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.username.label }}<br>
+                {{ form.username }}<br>
+                {{ form.username.help_text }}<br><br>
+                {{ form.password.label }}<br>
+                {{ form.password }}<br>
+                <input type="submit" value="Sign In" name="submit_signin">
+            </form>
+            <button id="button_cancle" onclick="close_signin()">cancle</button><button id="button_signup" onclick="open_signup()">Sign Up</button>
+        </div>
+    </div>
+    <!-- Sugn Up Page -->
+    <div id="div_signup">
+        <div class="div_form_signup">
+            <form action="" method="POST" style="margin-top: 5px;">
+                {% csrf_token %}
+                {{ form2.username }}<br>
+                {{ form2.email }}<br>
+                {{ form2.password1 }}<br>
+                {{ form2.password2 }}<br>
+                <input type="submit" value="Sign Up" name="submit_signup">
+            </form>
+            <button id="button_cancle" onclick="close_signup()">cancle</button><button id="button_signup" onclick="open_signi_of_signup()">Sign In</button>
+        </div>
+    </div>
+    <!-- Block Content -->
+    <div class="grid_content">
+        <div class="item">
+            <li class="menu_item"><a href="#" onclick="show_content('content-0')">หน้าหลัก</a></li>
+            <li class="menu_item"><a href="#" onclick="show_content('content-1')">เริ่มต้นสร้างไอเดียร์</a></li>
+            <li class="menu_item"><a href="#" onclick="show_content('content-2')">กำหนดเป้าหมาย</a></li>
+            <li class="menu_item"><a href="#" onclick="show_content('content-3')">กำหนดความสำเร็จ</a></li>
+            <li class="menu_item"><a href="#" onclick="show_content('content-4')">เผยแพร่ความสำเร็จ</a></li>
+        </div>
+        <div class="item">
+            <div id="content-0" style="display: block;">
+                หน้าหลัก<br><br>
+                <img src="https://jobschiangrai.com/storage/uploads/image/various-computer-equipment-with-programming-code-screens-table-dark-room-cyber-security-concept-copy-space_236854-231361.jpg" alt="" style="width: 100%;">
+            </div>
+            <div id="content-1">
+                เริ่มต้นสร้างไอเดียร์<br><br>
+                <img src="https://img.freepik.com/premium-photo/abstract-background-design-images-wallpaper-ai-generated_643360-106714.jpg" alt="" style="width: 100%;">
+            </div>
+            <div id="content-2">
+                กำหนดเป้าหมาย<br><br>
+                <img src="https://img.freepik.com/premium-photo/background-design-images-wallpaper-ai-generated_859483-293328.jpg" alt="" style="width: 100%;">
+            </div>
+            <div id="content-3">
+                กำหนดความสำเร็จ<br><br>
+                <img src="https://img.freepik.com/premium-photo/abstract-background-design-images-wallpaper-ai-generated_643360-314153.jpg" alt="" style="width: 100%;">
+            </div>
+            <div id="content-4">
+                เผยแพร่ความสำเร็จ<br><br>
+                <img src="https://img.freepik.com/premium-photo/abstract-background-images-wallpaper-ai-generated_643360-50271.jpg" alt="" style="width: 100%;">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<!-- Javascript Function -->
+<script>
+    function open_signin() {
+        document.getElementById('div_signin').style.display="block";
+    };
+
+    function close_signin() {
+        document.getElementById('div_signin').style.display="none";
+    };
+
+    function open_signup(){
+        document.getElementById('div_signin').style.display="none";
+        document.getElementById('div_signup').style.display="block";
+    };
+
+    function open_signi_of_signup(){
+        document.getElementById('div_signup').style.display="none";
+        document.getElementById('div_signin').style.display="block";
+    };
+
+    function close_signup() {
+        document.getElementById('div_signup').style.display="none";
+    };
+
+    function show_content(content_name) {
+        document.getElementById('content-0').style.display="none";
+        document.getElementById('content-1').style.display="none";
+        document.getElementById('content-2').style.display="none";
+        document.getElementById('content-3').style.display="none";
+        document.getElementById('content-4').style.display="none";
+        document.getElementById(content_name).style.display="block";
+    };
+</script>

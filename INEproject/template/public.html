@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel="stylesheet" href="{% static 'style/public.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'image/INE.ico' %}">
+</head>
+<body>
+    <!-- Menubar -->
+    <div class="menubar">
+        <img src="{% static 'image/INE.png' %}" alt="logo" class="image_logo"><p class="text_logo">Welcome : {{ name }}</p>
+        <a href="/logout/"><h2 class="logout_button">Logout</h2></a>
+    </div>
+    <!-- Public -->
+    <div class="div_public">
+        <a href="{% url 'dashboard' name %}"><button id="btn-back">Dashboard</button></a>
+        <form action="{% url 'public' name %}">
+            <input type="search" name="search" id="" placeholder="🔍 search" style="padding: 5px 5px; width: 99.5%; margin-top: 10px;">
+        </form>
+        <table>
+            <thead><h2>Public Project</h2></thead>
+            {% if public %}
+                <tbody>
+                    {% for publics in public %}
+                        {% if publics.idea_status == False %}
+                            {% if publics.idea_start == True %}
+                                <tr>
+                                    {% for image in img %}
+                                        {% if publics.key_user_id == image.data_user_id %}
+                                            {% if image.image_profile %}
+                                                <td id="cd_image"><img src="/static/{{image.image_profile}}/" alt="" id="img_public"></td>
+                                            {% else %}
+                                                <td id="cd_image"><img src="https://cdn4.iconfinder.com/data/icons/web-ui-color/128/Account-512.png" alt="" id="img_public"></td>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for users in user %}
+                                        {% if users.id == publics.key_user_id %}
+                                            <td id="cd_name"><p>{{ publics.idea_name }}</p><p id="text_name">P{{publics.id}} : {{ publics.idea_datetime|date:'j/m/Y - G:i' }} @ {{ users.username }}</p></td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <td id="cd_button"><a href="{% url 'view' publics.id %}"><button id="btn-view">View</button></a></td>
+                                </tr>
+                                <tr><td></td><td colspan="2"><hr></td></tr>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            {% else %}
+                <tbody>
+                    <tr><td style="text-align: center; color: #414141;"><h1>ไม่พบข้อมูลที่ค้นหา</h1></td></tr>
+                </tbody>
+            {% endif %}
+        </table>
+        <div class="menu_bottom">
+        
+        </div>
+    </div>
+</body>
+</html>

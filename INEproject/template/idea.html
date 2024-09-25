@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel="stylesheet" href="{% static 'style/idea.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idea</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'image/INE.ico' %}">
+</head>
+<body>
+    <!-- Menubar -->
+    <div class="menubar">
+        <img src="{% static 'image/INE.png' %}" alt="logo" class="image_logo"><p class="text_logo">Welcome : {{ name }}</p>
+        <a href="/logout/"><h2 class="logout_button">Logout</h2></a>
+    </div>
+    <!-- Idea -->
+    <div class="grid_idea">
+        <div id="div-idea">
+            {% if img.image_profile %}
+                <img src="/static/{{img.image_profile}}/" alt=""><br>
+            {% else %}
+                <img src="https://cdn4.iconfinder.com/data/icons/web-ui-color/128/Account-512.png" alt=""><br>
+            {% endif %}
+            <div style="border-left: 2px solid #39aea9; margin: 30px 0px 0px 50%; width: 100%; height: 100%;"></div>
+        </div>
+        <div id="div-idea2">
+            <div><span>{{ idea.idea_name }}</span><p style="font-size: 10px;">create project : {{ idea.idea_datetime|date:'j/m/Y - G:i' }}</p></div>
+            {% if idea.idea_image %}
+                <div><img src="/static/{{idea.idea_image}}/" alt=""></div><br>
+            {% else %}
+                <br>
+            {% endif %}
+            <div>{{ idea.idea_description }}</div>
+        </div>
+        <div id="div-idea3"> <!-- Side Menu -->
+            {% if idea.idea_start == False %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <hr>
+                <input type="checkbox" name="status_project" id="public" value="public" onclick="if(this.checked){CheckboxSelect('private')}"><label for="choice">สาธารณะ</label><br>
+                <input type="checkbox" name="status_project" id="private" value="private" onclick="if(this.checked){CheckboxSelect('public')}"><label for="choice">เฉพาะฉัน</label><br>
+                <input type="submit" name="btn-start-project" id="btn-start" value="Start Project">
+            </form>
+            <a href="{% url 'dashboard' name %}"><button id="btn-back">Dashboard</button></a><hr>
+            <a href="{% url 'delete' idea.id %}"><button id="btn-delete" onclick="ConfirmDelete()">Delete Project</button></a>
+            {% else %}
+                {% if idea.idea_complete %}
+                    <div id="div-start-project" style="padding: 5px 0px 0px 5px;">
+                        test
+                    </div>
+                {% else %}
+                <div style="padding: 5px 0px 0px 5px;" id="div-start-project">
+                    <span>Start Project Successfully</span>
+                    <p style="font-size: 10px;">create project : {{ idea.idea_datetime|date:'j/m/Y - G:i' }}</p>
+                    <p style="font-size: 10px;">status : {% if idea.idea_status == True %}private{% else %}public{% endif %}</p>
+                    <p style="font-size: 10px;">Good Idea : {{ idea.idea_good.count }}</p>
+                    <p style="font-size: 10px;">Count Day : {{ day_count }} Day</p>
+                    <hr>
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{form.sub_idea.label}}<br>
+                        {{form.sub_idea}}<br>
+                        {{form.sub_body.label}}<br>
+                        {{form.sub_body}}<br>
+                        {{form.sub_image.label}}<br>
+                        {{form.sub_image}}<br>
+                        {{form.sub_file.label}}<br>
+                        {{form.sub_file}}<br>
+                        <input type="submit" name="btn-new-subidea" id="btn-start" value="New Method">
+                    </form>
+                    <a href="{% url 'dashboard' name %}"><button id="btn-back">Dashboard</button></a><hr>
+                    <a href="{% url 'idea_complete' name idea.id %}"><button id="btn-complete" onclick="ConfirmComplete()">Complete</button></a><hr>
+                    <a href="{% url 'delete' idea.id %}"><button id="btn-delete" onclick="ConfirmDelete()">Delete</button></a>
+                </div>
+                {% endif %}
+            {% endif %}
+            <!-- Complete -->
+            <div id="div-complete" style="display: none;">
+                <hr><a href="{% url 'dashboard' name %}"><button id="btn-back">Dashboard</button></a>
+                <a href="{% url 'delete' idea.id %}"><button id="btn-delete" onclick="ConfirmDelete()">Delete</button></a><hr>
+            </div>
+        </div>
+    </div>
+    <!-- Method -->
+    {% if sub %}
+        {% for subidea in sub %}
+        <div class="grid_idea">
+            <div id="div-idea">
+                <div style="border-left: 2px solid #39aea9; margin-left: 50%; width: 100%; height: 110%;">
+                    <hr style="width: 200%; border: 1px solid #39aea9; margin-top: -20px;">
+                </div>
+            </div>
+            <div id="div-idea2"> 
+                <div><span>{{subidea.sub_idea}}</span><p style="font-size: 10px;">create method : {{ subidea.sub_datetime|date:'j/m/Y - G:i' }}</p></div>
+                {% if subidea.sub_image %}
+                    <div><img src="/static/{{subidea.sub_image}}/" alt=""></div><br>
+                {% endif %}
+                <p>{{subidea.sub_body}}</p>
+            </div>
+            <div id="div-idea3">
+                <div style="margin: 20px 0px 0px 10px;">
+                    <p style="font-size: 10px;" id="method_create">Create Method : {{ subidea.sub_datetime|date:'j/m/Y - G:i' }}</p> 
+                    {% if subidea.sub_file %}
+                        <p style="font-size: 10px;">Document : <a href="/static/{{subidea.sub_file}}/" target="_blank">View</a></p>
+                    {% else %}
+                        <p style="font-size: 10px;">Document : None</p>
+                    {% endif %}
+                    {% if subidea.sub_complete %}
+                        <hr>
+                        <p style="font-size: 10px; color: #39aea9;">Complete : {{ subidea.sub_complete|date:'j/m/Y - G:i' }}</p>
+                        <hr>
+                    {% else %}
+                        <p style="font-size: 10px;">Complete : false</p>
+                        <a href="{% url 'method_complete' name idea.id subidea.id %}"><button onclick="ConfirmMethodComplete()" style="font-size: 12px;">complete</button></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
+<!-- Javascript Function -->
+<script type="text/Javascript">
+    function CheckboxSelect(id){
+        document.getElementById(id).checked=false;
+    }
+
+    function ConfirmDelete(){
+        if (confirm("Delete Project ?") == true) {
+            return true;
+        } else {
+            event.preventDefault();
+        };
+    }
+
+    function ConfirmComplete(){
+        if (confirm("Project Complete ?") == true) {
+            return true;
+        } else {
+            event.preventDefault();
+        };
+    }
+
+    function ConfirmMethodComplete(){
+        if (confirm("Method Complete ?") == true) {
+            return true;
+        } else {
+            event.preventDefault();
+        };
+    }
+
+    function CountDate(){
+        console.log("test");
+    }
+</script>

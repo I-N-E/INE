@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel="stylesheet" href="{% static 'style/dashboard.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'image/INE.ico' %}">
+</head>
+<body>
+    <!-- Menubar -->
+    <div class="menubar">
+        <img src="{% static 'image/INE.png' %}" alt="logo" class="image_logo"><p class="text_logo">Welcome : {{ name }}</p>
+        <a href="/logout/"><h2 class="logout_button">Logout</h2></a>
+    </div>
+    <!-- Dashboard -->
+    <div class="grid_dashboard">
+        <div class="menu_dashboard">
+            <a href="" onclick="select_menu('menu-1')"><li id="menu-1"><img src="{% static 'image/dash_b.png' %}" alt="" id="img-menu"><br>Dashboard</li></a>
+            <a href="public/" onclick="select_menu('menu-2')"><li id="menu-2"><img src="{% static 'image/public.png' %}" alt="" id="img-menu"><br>Public</li></a>
+            <a href="profile/" onclick="select_menu('menu-3')"><li id="menu-3"><img src="{% static 'image/profile.png' %}" alt="" id="img-menu"><br>Profile</li></a>
+            <a href="#" onclick="select_menu('menu-4'),new_idea()"><li id="menu-4"><img src="{% static 'image/new.png' %}" alt="" id="img-menu"><br>New</li></a>
+        </div>
+        <div class="item_dashboard">
+            <div id="new_project">
+                <div id="div-NewProject">
+                    <form action="#" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h3 style="padding-top: 5px;">เริ่มต้นสร้างโปรเจค</h3><p>สร้างเป้าหมายของความคิดที่สร้างสรรค์และบันทึกความสำเร็จของคุณ</p>
+                        <label for="">ชื่อโปรเจค</label><br>{{ form_idea.idea_name }}<br>
+                        <label for="">คำอธิบาย</label><br>{{ form_idea.idea_description }}<br>
+                        <label for="">ภาพหน้าปก</label><br>{{ form_idea.idea_image }}<br>
+                        <input type="submit" value="New Idea" id="new" name="btn_new_idea"><input type="submit" value="Close" id="close" onclick="close_menu('new_project')">
+                    </form>
+                </div>
+            </div>
+            {% if idea %}
+                {% for ideas in idea %}
+                    <a href="idea/{{ ideas.id }}" id="link-sub-item"><div class="sub_item">
+                        <p id="text-time">ID : {{ ideas.id }} -- create project : {{ ideas.idea_datetime|date:'j/m/Y - G:i'}}</p>
+                        <div><p id="text-idea"><b>{{ ideas.idea_name }}</b></p></div>
+                        {% if ideas.idea_image %}
+                            <div><img src="/static/{{ideas.idea_image}}/" alt=""></div><br>
+                        {% endif %}
+                        <div><p id="text-body">{{ ideas.idea_description }}</p></div>
+                    </div></a>
+                {% endfor %}
+            {% else %}
+                <div class="sub_item" style="text-align: center; align-content: center;">
+                    <h1>Not Project</h1><br>
+                    <p>please create a project in the side menu.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+<!-- Javascript Function -->
+<script>
+    function select_menu(id){
+        document.getElementById("menu-1").style.color='#414141';
+        document.getElementById("menu-2").style.color='#414141';
+        document.getElementById("menu-3").style.color='#414141';
+        document.getElementById("menu-4").style.color='#414141';
+        document.getElementById(id).style.color='#1a8ab4';
+    };
+    function new_idea(){
+        document.getElementById("new_project").style.display="block";
+    };
+    function close_menu(id){
+        document.getElementById(id).style.display="none";
+    };
+</script>
