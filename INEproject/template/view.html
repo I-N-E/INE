@@ -18,35 +18,35 @@
     <!-- View Project -->
     <div class="div_view">
         <div class="div_line"></div>
-        <div>
-            <a href="{% url 'public' name %}"><button id="btn-back">Public</button></a><br>
-            {% if name in view.idea_good.all %}
-                <a href="{% url 'good' view.id %}"><button id="btn_no_good">Good ✘</button></a>
-            {% else %}
-                <a href="{% url 'good' view.id %}"><button id="btn_good">Good ✔</button></a>
-            {% endif %}
-            <h3 id="name_view">{{view.idea_name}}</h3>
-            {% if view.idea_image %}
-                <img src="/static/{{view.idea_image}}/" alt="">
-            {% endif %}
-            <p>{{view.idea_description}}</p>
-            {% if sub %}
-                {% for subs in sub %}
-                    <hr class="line_hr">
-                    <h3>{{subs.sub_idea}}</h3>
-                    <p style="font-size: 10px;">{{subs.sub_datetime}}</p>
-                    {% if subs.sub_image %}
-                        <img src="/static/{{subs.sub_image}}/" alt="">
-                    {% endif %}
-                    <p>{{subs.sub_body}}</p>
-                    {% if subs.sub_file %}
-                        <a href="/static/{{subs.sub_file}}/" target="_blank"><button>view document</button></a>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </div>
+            <div>
+                <a href="{% url 'public' name %}"><button id="btn-back">Public</button></a><br>
+                {% if name in view.idea_good.all %}
+                    <a href="{% url 'good' view.id %}"><button id="btn_no_good">Good ✘</button></a>
+                {% else %}
+                    <a href="{% url 'good' view.id %}"><button id="btn_good">Good ✔</button></a>
+                {% endif %}
+                <h3 id="name_view">{{view.idea_name}}</h3><p style="font-size: 10px;">create project : {{ view.idea_datetime|date:'j/m/Y - G:i' }}</p>
+                {% if view.idea_image %}
+                    <img src="/static/{{view.idea_image}}/" alt="">
+                {% endif %}
+                <p id="text_description">{{view.idea_description}}</p>
+                {% if sub %}
+                    {% for subs in sub %}
+                        <hr class="line_hr">
+                        <p><b>{{subs.sub_idea}}</b></p>
+                        <p style="font-size: 10px;">create method : {{subs.sub_datetime|date:'j/m/Y - G:i'}}</p>
+                        {% if subs.sub_image %}
+                            <img src="/static/{{subs.sub_image}}/" alt="">
+                        {% endif %}
+                        <p>{{subs.sub_body}}</p>
+                        {% if subs.sub_file %}
+                            <a href="/static/{{subs.sub_file}}/" target="_blank"><button>view document</button></a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
         <div class="data_view">
-            <p id="text-heading">Create : {{ view.idea_datetime|date:'j/m/Y - G.i' }} @ {{ user.username }} -- <a href="#">Good : {{view.count_good}}</a></p>
+            <p id="text-heading">Create : {{ view.idea_datetime|date:'j/m/Y - G.i' }} @ {{ user.username }}</p>
             {% if img.image_profile %}
                 <img src="/static/{{img.image_profile}}/" alt=""><br>
             {% else %}
@@ -56,8 +56,10 @@
             <hr>
             <div>
                 <p id="text-heading" style="text-align: left; margin-left: 10%;">method : {{sub.count}}</p>
+                <p id="text-heading" style="text-align: left; margin-left: 10%;">Good : {{view.count_good}}</p>
                 {% if view.idea_complete %}
-                    <p id="text-heading" style="text-align: left; margin-left: 10%;">complete : {{view.idea_complete|date:'j/m/Y - G.i'}}</p>
+                <p id="text-heading" style="text-align: left; margin-left: 10%; color: #39aea9;">complete : {{view.idea_complete|date:'j/m/Y - G.i'}}</p>
+                <p id="text-heading" style="text-align: left; margin-left: 10%;">Project Day : {{project_day}}</p>
                 {% else %}
                     <p id="text-heading" style="text-align: left; margin-left: 10%;">complete : false</p>
                 {% endif %}

@@ -32,8 +32,9 @@
     border-radius: 10%;
 }
 
-.data_view p {
-    font-size: 70%;
+#text_description {
+    text-align: justify;
+    white-space: pre-line;
 }
 
 #text-heading {
@@ -92,7 +93,7 @@
     padding: 5px 5px;
     color: #414141;
     background-color: #1a8ab4;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: Impact, 'Arial Narrow Bold', sans-serif;
     font-size: 14px;
 }
 

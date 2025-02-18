@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from INEapp.form import FormSignin,FormSignup,FormIdea,FormEditUser,FormEditDatauser,Formsubidea
 from INEapp.models import Idea,DataUser,SubIdea
-from datetime import datetime,timedelta
+from datetime import datetime,timezone,timedelta
 
 # Create your views here.
 
@@ -83,9 +83,18 @@ def dashboard(request,name):
             form_idea = FormIdea(request.POST)
             if form_idea.is_valid():
                 if request.FILES.get('idea_image') is not None:
-                    new_idea = Idea.objects.create(idea_name=request.POST['idea_name'],idea_description=request.POST['idea_description'],idea_image=request.FILES['idea_image'],key_user=user)
+                    new_idea = Idea.objects.create(
+                        idea_name=request.POST['idea_name'],
+                        idea_description=request.POST['idea_description'],
+                        idea_image=request.FILES['idea_image'],
+                        key_user=user
+                        )
                 else:
-                    new_idea = Idea.objects.create(idea_name=request.POST['idea_name'],idea_description=request.POST['idea_description'],key_user=user)
+                    new_idea = Idea.objects.create(
+                        idea_name=request.POST['idea_name'],
+                        idea_description=request.POST['idea_description'],
+                        key_user=user
+                        )
                 new_idea.save() ; del new_idea,user
                 return redirect(reverse('dashboard',kwargs={'name':name}))
             else:
@@ -93,7 +102,44 @@ def dashboard(request,name):
     else:
         idea = FormIdea()
         user_idea = Idea.objects.filter(key_user = request.user)
-        context = {'name':name,'form_idea':idea,'idea':user_idea} ; del name,idea,user_idea
+        data_list = []
+        idea_list = []
+        method_complete_list = []
+        project_complete_list = []
+        count_method_complete = 0
+        for list in user_idea:
+            idea_list.append(f'P{list.id}')
+            data_list.append(SubIdea.objects.filter(key_idea_id=list.id).count())
+            for method in SubIdea.objects.filter(key_idea_id=list.id):
+                if method.sub_complete is not None:
+                    count_method_complete += 1
+            if int(SubIdea.objects.filter(key_idea_id=list.id).count()) == 0:
+                percen = 0
+            else: 
+                percen = float((int(count_method_complete) / int(SubIdea.objects.filter(key_idea_id=list.id).count())) * 100)
+            method_complete_list.append(percen)
+            count_method_complete = 0
+        for check_complete in Idea.objects.filter(key_user_id=request.user.id):
+            if check_complete.idea_complete is not None:
+                count_method_complete += 1
+        if int(Idea.objects.filter(key_user_id=request.user.id).count()) == 0:
+            project_complete_list.append(0)
+        else:
+            project_complete_list.append(
+                (int(count_method_complete) / int(Idea.objects.filter(key_user_id=request.user.id).count())) * 100
+                )
+            project_complete_list.append(
+                100 - (int(count_method_complete) / int(Idea.objects.filter(key_user_id=request.user.id).count())) * 100
+                ) 
+        context = {
+            'name':name,'form_idea':idea,
+            'idea':user_idea,
+            'list_idea':idea_list,
+            'list_data':data_list,
+            'complete_m':method_complete_list,
+            'complete_p':project_complete_list
+            }
+        del name,idea,user_idea,idea_list,data_list,count_method_complete,project_complete_list
         return render(request,'dashboard.html',context)
 
 @login_required(login_url='/')
@@ -169,7 +215,10 @@ def idea(request,name,id):
         subidea = SubIdea.objects.filter(key_idea_id=id)
         image_profile = DataUser.objects.get(data_user_id=request.user.id)
         select_idea = Idea.objects.get(id=id)
-        count_day = datetime.now().day - timedelta(days=select_idea.idea_datetime.day).days
+        if select_idea.idea_complete is not None:
+            count_day = int((datetime.date(select_idea.idea_complete) - datetime.date(select_idea.idea_datetime)).days)
+        else:
+            count_day = int((datetime.date(datetime.now()) - datetime.date(select_idea.idea_datetime)).days)
         context = {'name':name,'id':id,'idea':select_idea,'img':image_profile,'day_count':count_day,'form':form_sub,'sub':subidea}
         del select_idea,image_profile,count_day,form_sub,subidea
         return render(request,'idea.html',context)
@@ -239,7 +288,11 @@ def view_project(request,pk):
     view_idea = get_object_or_404(Idea,id=pk)
     user = User.objects.get(id=view_idea.key_user_id)
     img = DataUser.objects.get(data_user_id=user.id)
-    context = {'view':view_idea,'user':user,'img':img,'name':request.user,'sub':sub_idea} ; del view_idea,user,img,sub_idea
+    context = {'view':view_idea,'user':user,'img':img,'name':request.user,'sub':sub_idea}
+    if view_idea.idea_complete is not None:
+        context.update({'project_day': int((datetime.date(view_idea.idea_complete) - datetime.date(view_idea.idea_datetime)).days)})
+    else:pass
+    del view_idea,user,img,sub_idea
     return render(request,'view.html',context)
 
 @login_required(login_url='/')
@@ -295,19 +348,38 @@ def folloW(request,pk):
 @login_required(login_url='/')
 def delete(request,pk):
     delete_idea = Idea.objects.get(id=pk)
+    delete_sub = SubIdea.objects.filter(key_idea_id=pk)
     if delete_idea.idea_image is not None:
         delete_idea.idea_image.delete()
     else:pass
+    for data_sub in delete_sub:
+        if data_sub.sub_image is not None:
+            data_sub.sub_image.delete()
+        if data_sub.sub_file is not None:
+            data_sub.sub_file.delete()
+        else:pass
     delete_idea.delete() ; del delete_idea
-    return redirect(reverse('dashboar',kwargs={'name':request.user}))
+    return redirect(reverse('dashboard',kwargs={'name':request.user}))
 
 def idea_complete(request,name,id):
-    print('idea complete')
+    complete_idea = Idea.objects.get(id=id)
+    method_idea = SubIdea.objects.filter(key_idea_id=id)
+    for method in method_idea:
+        if method.sub_complete is not None:
+            pass
+        else:
+            del complete_idea,method_idea
+            return HttpResponse(f'''<h1 style="color: #ff0101; font-size: 30px;">failed !</h1>
+                                        <p>method : M{method.id} is not complete.</p><a href="/dashboard/{name}/idea/{id}/"><h3>Back</h3></a>
+                                    ''')
+    complete_idea.idea_complete = datetime.now(tz=timezone(timedelta(hours=7)))
+    complete_idea.save()
+    del complete_idea,method_idea
     return redirect(reverse('idea',kwargs={'name':name,'id':id}))
 
 def method_complete(request,name,id,pk):
     sub_idea_complete = SubIdea.objects.get(id=pk)
-    sub_idea_complete.sub_complete = datetime.now()
+    sub_idea_complete.sub_complete = datetime.now(tz=timezone(timedelta(hours=7)))
     sub_idea_complete.save() ; del sub_idea_complete
     return redirect(reverse('idea',kwargs={'name':name,'id':id}))
 

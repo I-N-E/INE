@@ -15,36 +15,44 @@
         <img src="{% static 'image/INE.png' %}" alt="logo" class="image_logo"><p class="text_logo">Welcome : {{ name }}</p>
         <a href="/logout/"><h2 class="logout_button">Logout</h2></a>
     </div>
-    <!-- Dashboard -->
+    <!-- Dashboard Chart -->
+    <!-- Dashboard Main -->
     <div class="grid_dashboard">
         <div class="menu_dashboard">
-            <a href="" onclick="select_menu('menu-1')"><li id="menu-1"><img src="{% static 'image/dash_b.png' %}" alt="" id="img-menu"><br>Dashboard</li></a>
-            <a href="public/" onclick="select_menu('menu-2')"><li id="menu-2"><img src="{% static 'image/public.png' %}" alt="" id="img-menu"><br>Public</li></a>
-            <a href="profile/" onclick="select_menu('menu-3')"><li id="menu-3"><img src="{% static 'image/profile.png' %}" alt="" id="img-menu"><br>Profile</li></a>
+            <a href="#" onclick="select_menu('menu-1'),viewDashboard()"><li id="menu-1"><img src="{% static 'image/dash_b.png' %}" alt="" id="img-menu"><br>Dashboard</li></a>
             <a href="#" onclick="select_menu('menu-4'),new_idea()"><li id="menu-4"><img src="{% static 'image/new.png' %}" alt="" id="img-menu"><br>New</li></a>
+            <a href="profile/" onclick="select_menu('menu-3')"><li id="menu-3"><img src="{% static 'image/profile.png' %}" alt="" id="img-menu"><br>Profile</li></a>
+            <a href="public/" onclick="select_menu('menu-2')"><li id="menu-2"><img src="{% static 'image/public.png' %}" alt="" id="img-menu"><br>Public</li></a>
         </div>
         <div class="item_dashboard">
-            <div id="new_project">
-                <div id="div-NewProject">
-                    <form action="#" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <h3 style="padding-top: 5px;">เริ่มต้นสร้างโปรเจค</h3><p>สร้างเป้าหมายของความคิดที่สร้างสรรค์และบันทึกความสำเร็จของคุณ</p>
-                        <label for="">ชื่อโปรเจค</label><br>{{ form_idea.idea_name }}<br>
-                        <label for="">คำอธิบาย</label><br>{{ form_idea.idea_description }}<br>
-                        <label for="">ภาพหน้าปก</label><br>{{ form_idea.idea_image }}<br>
-                        <input type="submit" value="New Idea" id="new" name="btn_new_idea"><input type="submit" value="Close" id="close" onclick="close_menu('new_project')">
-                    </form>
-                </div>
+          <div id="new_project">
+            <div id="div-NewProject">
+                <form action="#" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h3 style="padding-top: 5px;">เริ่มต้นสร้างโปรเจค</h3><p>สร้างเป้าหมายของความคิดที่สร้างสรรค์และบันทึกความสำเร็จของคุณ</p>
+                    <label for="">ชื่อโปรเจค</label><br>{{ form_idea.idea_name }}<br>test
+                    <label for="">คำอธิบาย</label><br>{{ form_idea.idea_description }}<br>
+                    <label for="">ภาพหน้าปก</label><br>{{ form_idea.idea_image }}<br>
+                    <input type="submit" value="New Idea" id="new" name="btn_new_idea"><input type="submit" value="Close" id="close" onclick="close_menu('new_project')">
+                </form>
+            </div>
+          </div>
+            <div id="div-chart">
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <canvas id="myChart"></canvas><hr>
+              <canvas id="myChart2"></canvas><hr>
+              <canvas id="myChart3"></canvas><br>
+              <button id="colse_chart" onclick="close_menu('div-chart')">close</button>
             </div>
             {% if idea %}
                 {% for ideas in idea %}
                     <a href="idea/{{ ideas.id }}" id="link-sub-item"><div class="sub_item">
-                        <p id="text-time">ID : {{ ideas.id }} -- create project : {{ ideas.idea_datetime|date:'j/m/Y - G:i'}}</p>
+                        <p id="text-time">P{{ ideas.id }} -- create project : {{ ideas.idea_datetime|date:'j/m/Y - G:i'}}</p>
                         <div><p id="text-idea"><b>{{ ideas.idea_name }}</b></p></div>
                         {% if ideas.idea_image %}
-                            <div><img src="/static/{{ideas.idea_image}}/" alt=""></div><br>
+                            <div><img src="/static/{{ideas.idea_image}}/" alt=""></div>
                         {% endif %}
-                        <div><p id="text-body">{{ ideas.idea_description }}</p></div>
+                        <br>
                     </div></a>
                 {% endfor %}
             {% else %}
@@ -69,7 +77,77 @@
     function new_idea(){
         document.getElementById("new_project").style.display="block";
     };
-    function close_menu(id){
-        document.getElementById(id).style.display="none";
+    
+    function viewDashboard(){
+        document.getElementById("div-chart").style.display="block";
     };
+    
+    function close_menu(id){
+      document.getElementById(id).style.display="none";
+    };
+</script>
+
+<script type="text/Javascript">
+  const ctx_bar = document.getElementById('myChart');
+  new Chart(ctx_bar, {
+    type: 'bar',
+    data: {
+      labels: [{% for list in list_idea %}'{{list}}',{% endfor %}],
+      datasets: [{
+        label: 'Method',
+        data: [{% for data in list_data %}'{{data}}',{% endfor %}],
+        borderWidth: 1,
+        backgroundColor: '#39aea9',
+        borderColor: '#48ebe3'
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero:true
+        }
+      }
+    }
+  });
+
+  const ctx_line = document.getElementById('myChart2');
+  new Chart(ctx_line, {
+    type: 'line',
+    data: {
+      labels: [{% for list in list_idea %}'{{list}}',{% endfor %}],
+      datasets: [{
+          label: 'Method Complete %',
+          data: [{% for data in complete_m %}'{{data}}',{% endfor %}],
+          backgroundColor: '#414141',
+          borderColor: '#39aea9'
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero:true
+        }
+      }
+    }
+  });
+
+  const ctx_doughnut = document.getElementById('myChart3');
+      new Chart(ctx_doughnut, {
+        type: 'doughnut',
+        data: {
+      labels: ['complete','Process'],
+      datasets: [{
+        label: 'Project Complete',
+        data: [{% for data2 in complete_p %}'{{data2}}',{% endfor %}],
+        backgroundColor: ['#39aea9','#414141']
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero:true
+        }
+      }
+    }
+  });
 </script>

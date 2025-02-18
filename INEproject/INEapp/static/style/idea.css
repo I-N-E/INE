@@ -110,3 +110,8 @@ p {
     margin: 20px 10px 0px 10px;
     color: aqua;
 }
+
+#text_body{
+    text-align: justify;
+    white-space: pre-line;
+}

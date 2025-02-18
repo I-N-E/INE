@@ -26,7 +26,7 @@
             <div style="border-left: 2px solid #39aea9; margin: 30px 0px 0px 50%; width: 100%; height: 100%;"></div>
         </div>
         <div id="div-idea2">
-            <div><span>{{ idea.idea_name }}</span><p style="font-size: 10px;">create project : {{ idea.idea_datetime|date:'j/m/Y - G:i' }}</p></div>
+            <div><span><b>{{ idea.idea_name }}</b></span><p style="font-size: 10px;">create project : {{ idea.idea_datetime|date:'j/m/Y - G:i' }}</p></div>
             {% if idea.idea_image %}
                 <div><img src="/static/{{idea.idea_image}}/" alt=""></div><br>
             {% else %}
@@ -48,32 +48,44 @@
             {% else %}
                 {% if idea.idea_complete %}
                     <div id="div-start-project" style="padding: 5px 0px 0px 5px;">
-                        test
+                        <hr>
+                        <span style="color: #39aea9;">Project Complete</span>
+                        <hr>
+                        <p style="font-size: 10px;">Complete : {{ idea.idea_complete|date:'j/m/Y - G:i' }}</p>
+                        <p style="font-size: 10px;">Project : P{{ idea.id }}</p>
+                        <p style="font-size: 10px;">Status : {% if idea.idea_status == True %}private{% else %}public{% endif %}</p>
+                        <p style="font-size: 10px;">Good Idea : {{ idea.idea_good.count }}</p>
+                        <p style="font-size: 10px;">Method : {{sub.count}}</p>
+                        <p style="font-size: 10px;">project Day : {{ day_count }} Day</p>
+                        <hr>
+                        <a href="{% url 'dashboard' name %}"><button id="btn-back">Dashboard</button></a>
+                        <a href="{% url 'delete' idea.id %}"><button id="btn-delete" onclick="ConfirmDelete()">Delete</button></a>
                     </div>
                 {% else %}
-                <div style="padding: 5px 0px 0px 5px;" id="div-start-project">
-                    <span>Start Project Successfully</span>
-                    <p style="font-size: 10px;">create project : {{ idea.idea_datetime|date:'j/m/Y - G:i' }}</p>
-                    <p style="font-size: 10px;">status : {% if idea.idea_status == True %}private{% else %}public{% endif %}</p>
-                    <p style="font-size: 10px;">Good Idea : {{ idea.idea_good.count }}</p>
-                    <p style="font-size: 10px;">Count Day : {{ day_count }} Day</p>
-                    <hr>
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{form.sub_idea.label}}<br>
-                        {{form.sub_idea}}<br>
-                        {{form.sub_body.label}}<br>
-                        {{form.sub_body}}<br>
-                        {{form.sub_image.label}}<br>
-                        {{form.sub_image}}<br>
-                        {{form.sub_file.label}}<br>
-                        {{form.sub_file}}<br>
-                        <input type="submit" name="btn-new-subidea" id="btn-start" value="New Method">
-                    </form>
-                    <a href="{% url 'dashboard' name %}"><button id="btn-back">Dashboard</button></a><hr>
-                    <a href="{% url 'idea_complete' name idea.id %}"><button id="btn-complete" onclick="ConfirmComplete()">Complete</button></a><hr>
-                    <a href="{% url 'delete' idea.id %}"><button id="btn-delete" onclick="ConfirmDelete()">Delete</button></a>
-                </div>
+                    <div style="padding: 5px 0px 0px 5px;" id="div-start-project">
+                        <span>Start Project Successfully</span>
+                        <p style="font-size: 10px;">Project : P{{ idea.id }}</p>
+                        <p style="font-size: 10px;">Status : {% if idea.idea_status == True %}private{% else %}public{% endif %}</p>
+                        <p style="font-size: 10px;">Method : {{sub.count}}</p>
+                        <p style="font-size: 10px;">Good Idea : {{ idea.idea_good.count }}</p>
+                        <p style="font-size: 10px;">Count Day : {{ day_count }} Day</p>
+                        <hr>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{form.sub_idea.label}}<br>
+                            {{form.sub_idea}}<br>
+                            {{form.sub_body.label}}<br>
+                            {{form.sub_body}}<br>
+                            {{form.sub_image.label}}<br>
+                            {{form.sub_image}}<br>
+                            {{form.sub_file.label}}<br>
+                            {{form.sub_file}}<br>
+                            <input type="submit" name="btn-new-subidea" id="btn-start" value="New Method">
+                        </form>
+                        <a href="{% url 'dashboard' name %}"><button id="btn-back">Dashboard</button></a><hr>
+                        <a href="{% url 'idea_complete' name idea.id %}"><button id="btn-complete" onclick="ConfirmComplete()">Complete</button></a><hr>
+                        <a href="{% url 'delete' idea.id %}"><button id="btn-delete" onclick="ConfirmDelete()">Delete</button></a>
+                    </div>
                 {% endif %}
             {% endif %}
             <!-- Complete -->
@@ -93,15 +105,15 @@
                 </div>
             </div>
             <div id="div-idea2"> 
-                <div><span>{{subidea.sub_idea}}</span><p style="font-size: 10px;">create method : {{ subidea.sub_datetime|date:'j/m/Y - G:i' }}</p></div>
+                <div><span><b>{{subidea.sub_idea}}</b></span><p style="font-size: 10px;">create method : {{ subidea.sub_datetime|date:'j/m/Y - G:i' }}</p></div>
                 {% if subidea.sub_image %}
                     <div><img src="/static/{{subidea.sub_image}}/" alt=""></div><br>
                 {% endif %}
-                <p>{{subidea.sub_body}}</p>
+                <p id="text_body">{{subidea.sub_body}}</p>
             </div>
             <div id="div-idea3">
                 <div style="margin: 20px 0px 0px 10px;">
-                    <p style="font-size: 10px;" id="method_create">Create Method : {{ subidea.sub_datetime|date:'j/m/Y - G:i' }}</p> 
+                    <p style="font-size: 10px;" id="method_create">Method : M{{ subidea.id }}</p>
                     {% if subidea.sub_file %}
                         <p style="font-size: 10px;">Document : <a href="/static/{{subidea.sub_file}}/" target="_blank">View</a></p>
                     {% else %}
